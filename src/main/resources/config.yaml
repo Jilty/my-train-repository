@@ -1,0 +1,14 @@
+mysql:
+  host: "64.227.37.97"
+  port: "3306"
+  user: "njclabs"
+  password: "training"
+  database: "nrs"
+  
+servicenow:
+  url:"https://dev63625.service-now.com"
+  username:"admin"
+  password:"gi0AN2QHdcTn"
+
+ 
+  

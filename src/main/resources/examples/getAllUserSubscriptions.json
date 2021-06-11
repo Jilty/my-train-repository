@@ -1,0 +1,21 @@
+{
+    "subscriptionId": 1,
+    "departureTime": "12:30:00",
+    "arrivalTime": "12:30:00",
+    "fromStation": "ABC",
+    "toStation": "DEF",
+    "startDate": "2020-05-09",
+    "serviceType": "delayNotification",
+    "route": "BYI",
+    "timePeriod": 30,
+    "userId": 9,
+    "serviceId": 8,
+    "alertService": "alert",
+    "delayStatus": "delayed",
+    "statusTypeId": 2,
+    "status": "active",
+    "creationDate?": "2021-09-03",
+    "createdBy?": "Ben",
+    "lastUpdatedDate?": "2021-09-03",
+    "lastUpdatedBy?": "John"
+  }

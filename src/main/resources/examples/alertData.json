@@ -1,0 +1,12 @@
+{
+    "alertId": 444,
+    "emailNotify": "Notified",
+    "delayStatus": "Delayed",
+    "statusType": "active",
+    "estimatedTime": "12:00:00",
+    "locationName": "LBG",
+    "creationDate?": "2021-09-03",
+    "createdBy?": "Ben",
+    "lastUpdatedDate?": "2021-09-03",
+    "lastUpdatedBy?": "John"
+  }

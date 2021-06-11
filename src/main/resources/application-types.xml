@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="customers_json" format="json">
+      <types:shape format="weave" example="examples/getCustomerExample.json"><![CDATA[%dw 2.0
+
+type customers_json = {|
+  customerId: Number {"typeId": "int"}, 
+  firstName: String, 
+  lastName: String, 
+  emailId: String, 
+  password: String, 
+  phoneNo: String, 
+  "creationDate?": String, 
+  "createdBy?": String, 
+  "lastUpdatedDate?": String, 
+  "lastUpdatedBy?": String
+|} {"example": "{\\\"customerId\\\":1,\\\"firstName\\\":\\\"William\\\",\\\"lastName\\\":\\\"Whatson\\\",\\\"emailId\\\":\\\"willam@abc.com\\\",\\\"password\\\":\\\"jjndfj\\\",\\\"phoneNo\\\":\\\"1238455\\\",\\\"creationDate?\\\":\\\"2021-09-03\\\",\\\"createdBy?\\\":\\\"Ben\\\",\\\"lastUpdatedDate?\\\":\\\"2021-09-03\\\",\\\"lastUpdatedBy?\\\":\\\"John\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="addCustomer_json" format="json">
+      <types:shape format="weave" example="examples/addCustomer_example-1.json"><![CDATA[%dw 2.0
+
+type addCustomer_json = {|
+  firstName: String, 
+  lastName: String, 
+  emailId: String, 
+  phoneNo: String, 
+  password: String, 
+  statusId: Number {"typeId": "int"}, 
+  "creationDate?": String, 
+  "createdBy?": String, 
+  "lastUpdatedDate?": String, 
+  "lastUpdatedBy?": String
+|} {"example": "{\\\"firstName\\\":\\\"William\\\",\\\"lastName\\\":\\\"Whatson\\\",\\\"emailId\\\":\\\"willam@abc.com\\\",\\\"phoneNo\\\":\\\"1238455\\\",\\\"password\\\":\\\"dfkkkk\\\",\\\"statusId\\\":1,\\\"creationDate?\\\":\\\"2021-09-03\\\",\\\"createdBy?\\\":\\\"Ben\\\",\\\"lastUpdatedDate?\\\":\\\"2021-09-03\\\",\\\"lastUpdatedBy?\\\":\\\"John\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="getSubscription_json" format="json">
+      <types:shape format="weave" example="examples/getAllUserSubscriptions.json"><![CDATA[%dw 2.0
+
+type getSubscription_json = {|
+  subscriptionId: Number {"typeId": "int"}, 
+  departureTime: String, 
+  arrivalTime: String, 
+  fromStation: String, 
+  toStation: String, 
+  startDate: String, 
+  serviceType: String, 
+  route: String, 
+  timePeriod: Number {"typeId": "int"}, 
+  userId: Number {"typeId": "int"}, 
+  serviceId: Number {"typeId": "int"}, 
+  alertService: String, 
+  delayStatus: String, 
+  statusTypeId: Number {"typeId": "int"}, 
+  status: String, 
+  "creationDate?": String, 
+  "createdBy?": String, 
+  "lastUpdatedDate?": String, 
+  "lastUpdatedBy?": String
+|} {"example": "{\\\"subscriptionId\\\":1,\\\"departureTime\\\":\\\"12:30:00\\\",\\\"arrivalTime\\\":\\\"12:30:00\\\",\\\"fromStation\\\":\\\"ABC\\\",\\\"toStation\\\":\\\"DEF\\\",\\\"startDate\\\":\\\"2020-05-09\\\",\\\"serviceType\\\":\\\"delayNotification\\\",\\\"route\\\":\\\"BYI\\\",\\\"timePeriod\\\":30,\\\"userId\\\":9,\\\"serviceId\\\":8,\\\"alertService\\\":\\\"alert\\\",\\\"delayStatus\\\":\\\"delayed\\\",\\\"statusTypeId\\\":2,\\\"status\\\":\\\"active\\\",\\\"creationDate?\\\":\\\"2021-09-03\\\",\\\"createdBy?\\\":\\\"Ben\\\",\\\"lastUpdatedDate?\\\":\\\"2021-09-03\\\",\\\"lastUpdatedBy?\\\":\\\"John\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="alertData_json" format="json">
+      <types:shape format="weave" example="examples/alertData.json"><![CDATA[%dw 2.0
+
+type alertData_json = {|
+  alertId: Number {"typeId": "int"}, 
+  emailNotify: String, 
+  delayStatus: String, 
+  statusType: String, 
+  estimatedTime: String, 
+  locationName: String, 
+  "creationDate?": String, 
+  "createdBy?": String, 
+  "lastUpdatedDate?": String, 
+  "lastUpdatedBy?": String
+|} {"example": "{\\\"alertId\\\":444,\\\"emailNotify\\\":\\\"Notified\\\",\\\"delayStatus\\\":\\\"Delayed\\\",\\\"statusType\\\":\\\"active\\\",\\\"estimatedTime\\\":\\\"12:00:00\\\",\\\"locationName\\\":\\\"LBG\\\",\\\"creationDate?\\\":\\\"2021-09-03\\\",\\\"createdBy?\\\":\\\"Ben\\\",\\\"lastUpdatedDate?\\\":\\\"2021-09-03\\\",\\\"lastUpdatedBy?\\\":\\\"John\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="userAuthentication_json" format="json">
+      <types:shape format="weave" example="examples/userAuthentication_json.json"><![CDATA[%dw 2.0
+
+type userAuthentication_json = {|
+  username: String, 
+  password: String
+|} {"example": "{\\\"username\\\":\\\"william@abc.com\\\",\\\"password\\\":\\\"williaM@123\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="signIn_json" format="json">
+      <types:shape format="weave" example="examples/userAuthentication_json-1.json"><![CDATA[%dw 2.0
+
+type signIn_json = {|
+  username: String, 
+  password: String
+|} {"example": "{\\\"username\\\":\\\"william@abc.com\\\",\\\"password\\\":\\\"williaM@123\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#2b22f939-3023-4d91-b266-6ff15237f945">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="customers_json[]"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#2c477b9f-d81e-468a-98ff-7ed107c9b945">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="addCustomer_json"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#5224a634-b08c-4358-abdf-d07498d81657">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="customers_json"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#d0029d40-8032-4b28-934d-62b4348987cc">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="getSubscription_json"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#70c3d6ed-2a60-42a2-83e2-049ddef8f1d7">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="getSubscription_json"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#cdae90a8-1d0f-41c0-b5dd-9bd824ed5f6f">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="alertData_json"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#99ae08b9-7570-4f20-af0b-24908e70e9c7">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="addCustomer_json"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#f968838f-c519-4ffb-9a16-65fffeb70f47">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="userAuthentication_json"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#b1663c01-bb35-4e98-a94a-c3391fd9f2af">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="signIn_json"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

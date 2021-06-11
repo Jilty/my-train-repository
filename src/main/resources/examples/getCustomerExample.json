@@ -1,0 +1,13 @@
+
+  {
+    "customerId": 1,
+    "firstName": "William",
+    "lastName": "Whatson",
+    "emailId": "willam@abc.com",
+    "password": "jjndfj",
+    "phoneNo": "1238455",
+    "creationDate?": 2021-09-03,
+    "createdBy?": "Ben",
+    "lastUpdatedDate?": 2021-09-03,
+    "lastUpdatedBy?": "John"
+  }

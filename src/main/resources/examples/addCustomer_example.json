@@ -1,0 +1,12 @@
+{ 
+    "firstName":"William",
+    "lastName": "Whatson",
+    "emailId":"willam@abc.com",
+    "phoneNo":"1238455",  
+    "statusId": 1,
+    "creationDate?": 2021-09-03,
+    "createdBy?": "Ben",      
+    "lastUpdatedDate?": 2021-09-03,
+   "lastUpdatedBy?":  "John"
+
+}

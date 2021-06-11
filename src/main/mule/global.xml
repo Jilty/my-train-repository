@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:my-train-service-now-api="http://www.mulesoft.org/schema/mule/my-train-service-now-api" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/my-train-service-now-api http://www.mulesoft.org/schema/mule/my-train-service-now-api/current/mule-my-train-service-now-api.xsd">
+	<db:config name="Database_Config1" doc:name="Database Config" doc:id="558a8ab6-94fb-4529-9440-93c6dfa8f131" >
+		<db:my-sql-connection host="${mysql.host}" port="${mysql.port}" user="${mysql.user}" password="${mysql.password}" database="${mysql.database}" />
+	</db:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="0220f687-8ced-4451-aba6-f61f6fe2dc8d" file="config.yaml" />
+	<servicenow:config name="ServiceNow_Config" doc:name="ServiceNow Config" doc:id="47fceb68-2103-4025-b1d8-eee34f1ae7a3" >
+		<servicenow:basic-connection username="admin" password="gi0AN2QHdcTn" serviceAddress="https://dev63625.service-now.com" >
+			<servicenow:transport >
+				<servicenow:basic-auth-http-message-dispatcher-provider username="admin" password="gi0AN2QHdcTn" />
+			</servicenow:transport>
+		</servicenow:basic-connection>
+	</servicenow:config>
+	<my-train-service-now-api:config name="My_Train_ServiceNow_API_Config" doc:name="My Train ServiceNow API Config" doc:id="6d9bb76f-555c-41af-b489-97ce850c4c81" property_host="localhost" property_port="8083" property_protocol="HTTP" property_basePath="/api" />
+	<error-handler name="globalError_Handler" doc:id="4cba3426-886d-4421-80d0-583c003b24d2" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="b123d523-62b1-4af3-9b56-7c4b64899fbf" type="DB:CONNECTIVITY">
+			<ee:transform doc:name="Transform Message" doc:id="29ffc838-d46c-42bc-9ce6-058563ab9798" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	description: error.description,
+	message:error.errorMessage
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="invokePayload" ><![CDATA[%dw 2.0
+output application/xml
+ns inc http://www.service-now.com/incident
+---
+{
+  inc#insert: {
+    caller_id : "NJCLabs",
+    comments:error.description,
+    short_description: error.description   
+  }
+ } 
+  ]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-continue>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7921ff87-da94-4670-98a3-304eaae3e504" type="ANY">
+			<ee:transform doc:name="Transform Message" doc:id="2a863512-4186-4936-a602-253066751e34" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	description: error.description,
+	message:error.errorMessage
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
+	</error-handler>
+</mule>
