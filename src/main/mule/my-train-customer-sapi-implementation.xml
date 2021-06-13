@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<db:my-sql-connection host="64.227.37.97" port="3306" user="njclabs" password="training" database="nrs" />
 	</db:config>
 	<flow name="getAllCustomerFlow" doc:id="2b22f939-3023-4d91-b266-6ff15237f945" >
-		<json-logger:logger doc:name="Logger" doc:id="6cfddfce-224f-4f17-aab5-cdc9f249c218" config-ref="JSON_Logger_Config" message="flow started"/>
+		<json-logger:logger doc:name="Logger" doc:id="6cfddfce-224f-4f17-aab5-cdc9f249c218" config-ref="JSON_Logger_Config" message="get all customer flow started"/>
 		<try doc:name="Try" doc:id="6471c024-9190-4c32-9008-fa937f637635" >
 			<db:select doc:name="Select" doc:id="74049e76-afb6-4653-8e52-729c428f673b" config-ref="Database_Config">
 			<db:sql><![CDATA[SELECT * FROM nrs.xxtrain_customer_details]]></db:sql>
