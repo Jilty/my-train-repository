@@ -11,8 +11,9 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="2a8058a2-66b1-4cf1-9740-718a062fd426" >
 		<db:my-sql-connection host="64.227.37.97" port="3306" user="njclabs" password="training" database="nrs" />
 	</db:config>
+	<json-logger:config name="JSON_Logger_Config1" doc:name="JSON Logger Config" doc:id="dbe87b6c-8db9-4b26-9e71-a7e7775a5607" environment="${mule.nv}" />
 	<flow name="getAllCustomerFlow" doc:id="2b22f939-3023-4d91-b266-6ff15237f945" >
-		<json-logger:logger doc:name="Logger" doc:id="6cfddfce-224f-4f17-aab5-cdc9f249c218" config-ref="JSON_Logger_Config" message="get all customer flow started"/>
+		<json-logger:logger doc:name="Logger" doc:id="6cfddfce-224f-4f17-aab5-cdc9f249c218" config-ref="JSON_Logger_Config1" message="get all customer flow started"/>
 		<try doc:name="Try" doc:id="6471c024-9190-4c32-9008-fa937f637635" >
 			<db:select doc:name="Select" doc:id="74049e76-afb6-4653-8e52-729c428f673b" config-ref="Database_Config">
 			<db:sql><![CDATA[SELECT * FROM nrs.xxtrain_customer_details]]></db:sql>
@@ -36,7 +37,7 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<json-logger:logger doc:name="Logger" doc:id="1aae16e2-f485-4d38-89aa-0b6af98837fe" config-ref="JSON_Logger_Config" message='"get all customer flow ended successfully"'/>
+		<json-logger:logger doc:name="Logger" doc:id="1aae16e2-f485-4d38-89aa-0b6af98837fe" config-ref="JSON_Logger_Config1" message='"get all customer flow ended successfully"'/>
 		<error-handler >
 			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="720a5a9d-f5f1-4df0-970b-1a9c7b79ae19" type="ANY">
 				<ee:transform doc:name="Transform Message" doc:id="68e5de59-f1fa-402f-b263-85bd607adef4" >
@@ -54,7 +55,7 @@ output application/json
 		</error-handler>
 	</flow>
 	<flow doc:id="2c477b9f-d81e-468a-98ff-7ed107c9b945" name="addCustomer" initialState="started">
-		<json-logger:logger doc:name="Logger" doc:id="f271c1a9-de43-4912-80f3-40d384ba787f" config-ref="JSON_Logger_Config" message="started"/>
+		<json-logger:logger doc:name="Logger" doc:id="f271c1a9-de43-4912-80f3-40d384ba787f" config-ref="JSON_Logger_Config1" message="started"/>
 		<try doc:name="Try" doc:id="705d06c2-377f-4dda-91d5-f377ca97d6b5" >
 			<db:insert doc:name="Insert" doc:id="a0fb427e-eefd-46d1-bf5d-c99610d1d35a" config-ref="Database_Config">
 			<db:sql><![CDATA[INSERT INTO xxtrain_customer_details (customer_id,first_name,last_name,status_type_id,email_id,phone_no,creation_date,created_by,last_updated_date,last_updated_by) values
@@ -74,10 +75,10 @@ output application/json
 		</db:insert>
 		</try>
 		<set-payload value='"customer added succesfully"' doc:name="Set Payload" doc:id="c18373ce-7c22-4533-86de-34309fca510b" />
-		<json-logger:logger doc:name="Logger" doc:id="2e34343c-000f-4581-8223-d6fbb124b331" config-ref="JSON_Logger_Config" message="Flow ended successfully"/>
+		<json-logger:logger doc:name="Logger" doc:id="2e34343c-000f-4581-8223-d6fbb124b331" config-ref="JSON_Logger_Config1" message="Flow ended successfully"/>
 	</flow>
 	<flow name="getUserById" doc:id="5b81d8e1-593b-46bb-8026-0d5234abda87" >
-		<json-logger:logger doc:name="Logger" doc:id="88ce6f49-598e-49a4-9045-2e167171211a" config-ref="JSON_Logger_Config" message="flow started"/>
+		<json-logger:logger doc:name="Logger" doc:id="88ce6f49-598e-49a4-9045-2e167171211a" config-ref="JSON_Logger_Config1" message="flow started"/>
 		<try doc:name="Try" doc:id="73d80085-e191-47d6-8fc5-3f5756aa9acd" >
 			<db:select doc:name="Select" doc:id="d23eeb44-10df-4c85-a17b-16bb772793ec" config-ref="Database_Config">
 			<db:sql><![CDATA[SELECT * FROM xxtrain_customer_details WHERE customer_id =:customerId]]></db:sql>
@@ -104,13 +105,13 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<json-logger:logger doc:name="Logger" doc:id="b1a09248-8f68-491f-877d-34f745810ff6" config-ref="JSON_Logger_Config" message='"get user by id completed "'/>
+		<json-logger:logger doc:name="Logger" doc:id="b1a09248-8f68-491f-877d-34f745810ff6" config-ref="JSON_Logger_Config1" message='"get user by id completed "'/>
 	</flow>
 	<flow name="updateSubscriptionStatus" doc:id="b9726814-2ed4-4ccb-8dad-c9c31160d23e" >
 		<json-logger:logger doc:name="Logger" doc:id="f591a69c-89ab-4dd9-8cc4-3b5635c0f3b8" config-ref="JSON_Logger_Config" message="flow started"/>
 	</flow>
 	<flow name="getAllUserSubscriptions" doc:id="441c06b3-f469-449b-bf98-78d5100e40cf" >
-		<json-logger:logger doc:name="Logger" doc:id="350299b1-7e00-4def-8b5e-33a18d97930a" config-ref="JSON_Logger_Config" message="flow started"/>
+		<json-logger:logger doc:name="Logger" doc:id="350299b1-7e00-4def-8b5e-33a18d97930a" config-ref="JSON_Logger_Config1" message="flow started"/>
 		<try doc:name="Try" doc:id="c13bc43c-748f-48e7-a811-86ead4d956f7" >
 			<db:select doc:name="Select" doc:id="d0029d40-8032-4b28-934d-62b4348987cc" config-ref="Database_Config">
 			<db:sql><![CDATA[SELECT * FROM nrs.xxtrain_subscription_details WHERE customer_id=:customer_id]]></db:sql>
@@ -149,7 +150,7 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 		<json-logger:logger doc:name="Logger" doc:id="0cb8419d-efd5-4d47-8d38-a5dbea96c6de" config-ref="JSON_Logger_Config" message="flow ended"/>
 	</flow>
 	<flow name="updateCustomer" doc:id="2fbe9fad-7d17-4ea1-8aca-18e5dec9984a" >
-		<json-logger:logger doc:name="Logger" doc:id="0bcf977e-7e49-4765-b91a-f3e87b110c54" config-ref="JSON_Logger_Config" message="flow started"/>
+		<json-logger:logger doc:name="Logger" doc:id="0bcf977e-7e49-4765-b91a-f3e87b110c54" config-ref="JSON_Logger_Config1" message="flow started"/>
 		<try doc:name="Try" doc:id="d9af0978-f289-42dd-ab48-f2e63c888d6a" >
 			<db:update doc:name="Update" doc:id="e8f21386-6743-45f0-8a45-3013f4a99426" config-ref="Database_Config">
 			<db:sql><![CDATA[UPDATE nrs.xxtrain_customer_details 
@@ -157,10 +158,10 @@ SET phone_no = : phone_no ]]></db:sql>
 			<db:input-parameters><![CDATA[#[{"phone_no": payload[0].phoneNumber}]]]></db:input-parameters>
 		</db:update>
 		</try>
-		<json-logger:logger doc:name="Logger" doc:id="9a59b35e-e308-4138-af51-4bd79c2e35a1" config-ref="JSON_Logger_Config" message="flow ended succesfully"/>
+		<json-logger:logger doc:name="Logger" doc:id="9a59b35e-e308-4138-af51-4bd79c2e35a1" config-ref="JSON_Logger_Config1" message="flow ended succesfully"/>
 	</flow>
 	<flow name="getAllAlertsBySubscription" doc:id="915951c1-8048-49bd-80c7-80fe7d7c3b21" >
-		<json-logger:logger doc:name="Logger" doc:id="9a9e6b9b-8198-4a5b-888a-518f10c86f95" config-ref="JSON_Logger_Config" message="flow started"/>
+		<json-logger:logger doc:name="Logger" doc:id="9a9e6b9b-8198-4a5b-888a-518f10c86f95" config-ref="JSON_Logger_Config1" message="flow started"/>
 		<try doc:name="Try" doc:id="9ad3a812-04e7-4105-939c-ad832358bfef" >
 			<db:select doc:name="Select" doc:id="9ec5b5f0-fa33-42a0-b7e2-749feea44b8d">
 			<db:sql><![CDATA[SELECT * FROM xxtrain_alert_details WHERE subscription_id =: subscriptionId]]></db:sql>
@@ -178,7 +179,7 @@ output application/json
 		</ee:transform>
 	</flow>
 	<flow doc:id="19f69b81-e3a1-4414-83e4-ea6840be5be5" name="addSubscription" initialState="started">
-		<json-logger:logger doc:name="Logger" doc:id="9480bd9d-5d30-4c53-8925-6ae33766b35c" config-ref="JSON_Logger_Config" message="flow started"/>
+		<json-logger:logger doc:name="Logger" doc:id="9480bd9d-5d30-4c53-8925-6ae33766b35c" config-ref="JSON_Logger_Config1" message="flow started"/>
 		<try doc:name="Try" doc:id="98ac0472-6876-4da1-ac03-3b532128585e" >
 			<db:insert doc:name="Insert" doc:id="3304ab77-b95d-4a74-85f5-ef4567ca125e" config-ref="Database_Config">
 			<db:sql><![CDATA[INSERT INTO xxtrain_subscription_details (customer_id,service_id,from_time,from_station,to_station,to_time,journey_date,service_type,
@@ -206,10 +207,10 @@ route,advance_notify_time,alert_service,delay_status,status_type_id,creation_dat
 }]]]></db:input-parameters>
 		</db:insert>
 		</try>
-		<json-logger:logger doc:name="Logger" doc:id="168e902e-ce82-47a1-af7a-8d1a5bb7c2bd" config-ref="JSON_Logger_Config" message="flow ended"/>
+		<json-logger:logger doc:name="Logger" doc:id="168e902e-ce82-47a1-af7a-8d1a5bb7c2bd" config-ref="JSON_Logger_Config1" message="flow ended"/>
 	</flow>
 	<flow name="addAlerts" doc:id="f67bdb9d-44a9-4614-89c0-b8751bd81289" >
-		<json-logger:logger doc:name="Logger" doc:id="d3dc54f2-5526-4b47-a493-ba671dcdb0a2" config-ref="JSON_Logger_Config" message='"Add Alerts flow started"'/>
+		<json-logger:logger doc:name="Logger" doc:id="d3dc54f2-5526-4b47-a493-ba671dcdb0a2" config-ref="JSON_Logger_Config1" message='"Add Alerts flow started"'/>
 		<try doc:name="Try" doc:id="065cd6a6-f3c6-482f-8aee-7a728fe0b492" >
 			<db:insert doc:name="Insert" doc:id="e40a14e9-5b0e-4406-ab14-dcfb2db85b6a" config-ref="Database_Config1">
 			<db:sql><![CDATA[INSERT INTO xxtrain_alert_details (subscription_id,email_id,email_notify,origin_location,destination_location,service_type,service_id,
@@ -237,6 +238,6 @@ delay_status,delay_time,train_delay_reason,status_type_id,creation_date,created_
 }]]]></db:input-parameters>
 		</db:insert>
 		</try>
-		<json-logger:logger doc:name="Logger" doc:id="daaaa278-cae5-4efc-8d25-5314b605f148" config-ref="JSON_Logger_Config" message="Add alerts flow ended succesfully"/>
+		<json-logger:logger doc:name="Logger" doc:id="daaaa278-cae5-4efc-8d25-5314b605f148" config-ref="JSON_Logger_Config1" message="Add alerts flow ended succesfully"/>
 	</flow>
 </mule>
