@@ -36,7 +36,7 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<json-logger:logger doc:name="Logger" doc:id="1aae16e2-f485-4d38-89aa-0b6af98837fe" config-ref="JSON_Logger_Config" message="Flow ended successfully"/>
+		<json-logger:logger doc:name="Logger" doc:id="1aae16e2-f485-4d38-89aa-0b6af98837fe" config-ref="JSON_Logger_Config" message="get all customer flow ended successfully"/>
 		<error-handler >
 			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="720a5a9d-f5f1-4df0-970b-1a9c7b79ae19" type="ANY">
 				<ee:transform doc:name="Transform Message" doc:id="68e5de59-f1fa-402f-b263-85bd607adef4" >
