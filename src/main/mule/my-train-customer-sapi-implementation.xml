@@ -104,6 +104,7 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<json-logger:logger doc:name="Logger" doc:id="b1a09248-8f68-491f-877d-34f745810ff6" config-ref="JSON_Logger_Config" message='"get user by id completed"'/>
 	</flow>
 	<flow name="updateSubscriptionStatus" doc:id="b9726814-2ed4-4ccb-8dad-c9c31160d23e" >
 		<json-logger:logger doc:name="Logger" doc:id="f591a69c-89ab-4dd9-8cc4-3b5635c0f3b8" config-ref="JSON_Logger_Config" message="flow started"/>
