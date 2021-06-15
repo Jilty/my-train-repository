@@ -124,7 +124,7 @@ output application/json
         </error-handler>
     </flow>
     <flow name="patch:\users\(userId)\subscription\(subscriptionId):application\json:my-train-customer-sapi-config">
-        <flow-ref doc:name="Flow Reference" doc:id="9edb3135-8810-408f-9f4c-c4de4517cbe6" name="updateSubscriptionStatus" />
+        <flow-ref doc:name="Flow Reference" doc:id="9edb3135-8810-408f-9f4c-c4de4517cbe6" name="updateSubscriptionsStatus" />
     </flow>
     <flow name="patch:\users\(userId):application\json:my-train-customer-sapi-config">
         <flow-ref doc:name="Flow Reference" doc:id="4e0cd35b-57a2-4a60-8d01-3734d4cb34ba" name="updateCustomer" />
