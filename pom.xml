@@ -31,15 +31,16 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-				<configuration>
-				<sharedLibraries>
+            <configuration>                  
+                
+                <sharedLibraries>
                         <sharedLibrary>
                             <groupId>mysql</groupId>
                             <artifactId>mysql-connector-java</artifactId>
                         </sharedLibrary>
                     </sharedLibraries>
                 </configuration>
-			</plugin>
+            </plugin>
 		<plugin>
                 <groupId>com.mulesoft.munit.tools</groupId>
                 <artifactId>munit-maven-plugin</artifactId>
@@ -74,7 +75,7 @@
             <classifier>mule-plugin</classifier>
         </dependency>
     	<dependency>
-            <groupId>e54e84df-8a66-43dc-983c-829f24ae67e4</groupId>
+            <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
             <artifactId>json-logger</artifactId>
             <version>2.0.1</version>
             <classifier>mule-plugin</classifier>
@@ -84,25 +85,6 @@
             <artifactId>mule-db-connector</artifactId>
             <version>1.9.1</version>
             <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.25</version>
-        </dependency>
-    	<dependency>
-            <groupId>e54e84df-8a66-43dc-983c-829f24ae67e4</groupId>
-            <artifactId>my-train-authentication-sapi</artifactId>
-            <version>1.0.1</version>
-            <classifier>raml</classifier>
-            <type>zip</type>
-        </dependency>
-    	<dependency>
-            <groupId>e54e84df-8a66-43dc-983c-829f24ae67e4</groupId>
-            <artifactId>my-train-customer-sapi</artifactId>
-            <version>1.0.4</version>
-            <classifier>raml</classifier>
-            <type>zip</type>
         </dependency>
     	<dependency>
             <groupId>com.mulesoft.connectors</groupId>
@@ -122,12 +104,7 @@
             <version>1.5.23</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-    	<dependency>
-            <groupId>e54e84df-8a66-43dc-983c-829f24ae67e4</groupId>
-            <artifactId>mule-plugin-my-train-servicenow-api</artifactId>
-            <version>1.0.0</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
+    	
     	<dependency>
             <groupId>com.mulesoft.munit</groupId>
             <artifactId>munit-runner</artifactId>
@@ -140,6 +117,36 @@
             <version>2.3.2</version>
             <classifier>mule-plugin</classifier>
             <scope>test</scope>
+        </dependency>
+    	<dependency>
+            <groupId>com.mulesoft.connectors</groupId>
+            <artifactId>mule-amqp-connector</artifactId>
+            <version>1.6.0</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-jms-connector</artifactId>
+            <version>1.6.3</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
+            <artifactId>json-logger</artifactId>
+            <version>2.0.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.25</version>
+        </dependency>
+    	<dependency>
+            <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
+            <artifactId>my-train-customer-sapi</artifactId>
+            <version>1.0.1</version>
+            <classifier>raml</classifier>
+            <type>zip</type>
         </dependency>
     </dependencies>
 

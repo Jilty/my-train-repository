@@ -18,7 +18,6 @@ http://www.mulesoft.org/schema/mule/my-train-service-now-api http://www.mulesoft
 			</servicenow:transport>
 		</servicenow:basic-connection>
 	</servicenow:config>
-	<my-train-service-now-api:config name="My_Train_ServiceNow_API_Config" doc:name="My Train ServiceNow API Config" doc:id="6d9bb76f-555c-41af-b489-97ce850c4c81" property_host="localhost" property_port="8083" property_protocol="HTTP" property_basePath="/api" />
 	<error-handler name="globalError_Handler" doc:id="4cba3426-886d-4421-80d0-583c003b24d2" >
 		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="b123d523-62b1-4af3-9b56-7c4b64899fbf" type="DB:CONNECTIVITY">
 			<ee:transform doc:name="Transform Message" doc:id="29ffc838-d46c-42bc-9ce6-058563ab9798" >

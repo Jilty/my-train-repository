@@ -3,7 +3,7 @@
     <http:listener-config name="my-train-customer-sapi-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="my-train-customer-sapi-config" api="resource::e54e84df-8a66-43dc-983c-829f24ae67e4:my-train-customer-sapi:1.0.4:raml:zip:my-train-customer-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="my-train-customer-sapi-config" api="resource::b24b82c7-69b0-4399-a459-f1bd6136fdde:my-train-customer-sapi:1.0.1:raml:zip:my-train-customer-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="my-train-customer-sapi-main">
         <http:listener config-ref="my-train-customer-sapi-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -213,7 +213,7 @@ output application/json
         <flow-ref doc:name="Flow Reference" doc:id="61ef4ed4-c4be-4c5c-a385-f0c36b3300e8" name="getUserById" />
     </flow>
     <flow name="post:\users\(userId)\subscription\(subscriptionId)\alerts:application\json:my-train-customer-sapi-config">
-		<flow-ref doc:name="Flow Reference" doc:id="e50ac8bb-0e14-4ead-90de-8dda6b4af731" name="addAlerts"/>
+        <flow-ref doc:name="Flow Reference" doc:id="e50ac8bb-0e14-4ead-90de-8dda6b4af731" name="addAlerts" />
     </flow>
     <flow name="post:\users\(userId)\subscription:application\json:my-train-customer-sapi-config">
         <flow-ref doc:name="Flow Reference" doc:id="2fa96f9c-e463-4f1a-ab3d-1a4512499e11" name="addSubscription" />
