@@ -74,12 +74,7 @@
             <version>1.4.1</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-    	<dependency>
-            <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
-            <artifactId>json-logger</artifactId>
-            <version>2.0.1</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
+    	
     	<dependency>
             <groupId>org.mule.connectors</groupId>
             <artifactId>mule-db-connector</artifactId>
@@ -131,12 +126,6 @@
             <classifier>mule-plugin</classifier>
         </dependency>
     	<dependency>
-            <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
-            <artifactId>json-logger</artifactId>
-            <version>2.0.1</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.25</version>
@@ -147,6 +136,12 @@
             <version>1.0.1</version>
             <classifier>raml</classifier>
             <type>zip</type>
+        </dependency>
+    	<dependency>
+            <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
+            <artifactId>json-logger</artifactId>
+            <version>2.0.1</version>
+            <classifier>mule-plugin</classifier>
         </dependency>
     </dependencies>
 

@@ -48,6 +48,11 @@
 			<munit-tools:assert-that doc:name="Assert that" doc:id="615adc91-ba1c-49b6-ae3b-0fe5570697df" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
 		</munit:validation>
 	</munit:test>
+	<munit:test name="my-train-customer-sapi-implementation-test-suite-addCustomerTest1" doc:id="9300dc51-cd5f-4ed8-bfd2-0f4a156e5d47" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to addCustomer" doc:id="5019c62f-1c3f-499d-9027-fe8afbda1401" name="addCustomer"/>
+		</munit:execution>
+	</munit:test>
 
 
 </mule>
