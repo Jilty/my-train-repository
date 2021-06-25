@@ -11,13 +11,6 @@ http://www.mulesoft.org/schema/mule/my-train-service-now-api http://www.mulesoft
 		<db:my-sql-connection host="${mysql.host}" port="${mysql.port}" user="${mysql.user}" password="${mysql.password}" database="${mysql.database}" />
 	</db:config>
 	<configuration-properties doc:name="Configuration properties" doc:id="0220f687-8ced-4451-aba6-f61f6fe2dc8d" file="config.yaml" />
-	<servicenow:config name="ServiceNow_Config" doc:name="ServiceNow Config" doc:id="47fceb68-2103-4025-b1d8-eee34f1ae7a3" >
-		<servicenow:basic-connection username="admin" password="gi0AN2QHdcTn" serviceAddress="https://dev63625.service-now.com" >
-			<servicenow:transport >
-				<servicenow:basic-auth-http-message-dispatcher-provider username="admin" password="gi0AN2QHdcTn" />
-			</servicenow:transport>
-		</servicenow:basic-connection>
-	</servicenow:config>
 	<error-handler name="globalError_Handler" doc:id="4cba3426-886d-4421-80d0-583c003b24d2" >
 		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="b123d523-62b1-4af3-9b56-7c4b64899fbf" type="DB:CONNECTIVITY">
 			<ee:transform doc:name="Transform Message" doc:id="29ffc838-d46c-42bc-9ce6-058563ab9798" >

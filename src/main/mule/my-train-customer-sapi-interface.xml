@@ -3,7 +3,7 @@
     <http:listener-config name="my-train-customer-sapi-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="my-train-customer-sapi-config" api="resource::b24b82c7-69b0-4399-a459-f1bd6136fdde:my-train-customer-sapi:1.0.1:raml:zip:my-train-customer-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="my-train-customer-sapi-config" api="resource::b24b82c7-69b0-4399-a459-f1bd6136fdde:my-train-customer-sapi:1.0.4:raml:zip:my-train-customer-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="my-train-customer-sapi-main">
         <http:listener config-ref="my-train-customer-sapi-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -176,7 +176,7 @@ output application/json
         <flow-ref doc:name="Flow Reference" doc:id="95bc9cf5-36f2-457a-8916-f682b8172b17" name="getAllUserSubscriptions" />
     </flow>
     <flow name="get:\users:my-train-customer-sapi-config">
-        <flow-ref doc:name="Flow Reference" doc:id="a00bb3ae-b76f-434a-ac5f-7d331b014053" name="getAllCustomerFlow" />
+        <flow-ref doc:name="Flow Reference" doc:id="36640c66-627c-46f8-bf30-d75adae36694" name="getAllCustomerFlow" />
     </flow>
     <flow name="get:\users\(userId)\subscription\(subscriptionId):my-train-customer-sapi-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -220,5 +220,8 @@ output application/json
     </flow>
     <flow name="post:\users:application\json:my-train-customer-sapi-config">
         <flow-ref doc:name="Flow Reference" doc:id="d7d6531e-a947-40cf-b627-501a2235930c" name="addCustomer" />
+    </flow>
+    <flow name="get:\sfdc:my-train-customer-sapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="e6ee8ad2-f601-468e-b0c0-dbcefce89956" name="user-Sfdc-flow"/>
     </flow>
 </mule>

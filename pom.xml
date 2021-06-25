@@ -13,9 +13,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.3.0-20210119</app.runtime>
+		<app.runtime>4.1.1</app.runtime>
 		<mule.maven.plugin.version>3.4.2</mule.maven.plugin.version>
-	<munit.version>2.3.2</munit.version>
+	    <munit.version>2.1.1</munit.version>
     </properties>
 
 	<build>
@@ -31,7 +31,20 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-            <configuration>                  
+            <configuration>    
+            <cloudHubDeployment>
+				    <uri>https://anypoint.mulesoft.com</uri>
+                    <muleVersion>4.1.1</muleVersion>
+				    <!-- Deploy User Parameter -->
+				    <username>JiltyVibin</username>
+				    <password>Jilty@123</password>
+				    <!-- Environment Parameter -->
+				    <environment>Sandbox</environment>
+				    <workers>1</workers>
+				    <applicationName>my-train-service</applicationName>
+				    <workerType>Micro</workerType>
+				    <objectStoreV2>true</objectStoreV2>
+                </cloudHubDeployment>              
                 
                 <sharedLibraries>
                         <sharedLibrary>
@@ -65,6 +78,8 @@
                 </configuration>
             </plugin>
         </plugins>
+        <defaultGoal>install</defaultGoal>
+        
 	</build>
 
 	<dependencies>
@@ -81,12 +96,7 @@
             <version>1.9.1</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-    	<dependency>
-            <groupId>com.mulesoft.connectors</groupId>
-            <artifactId>mule-servicenow-connector</artifactId>
-            <version>6.9.1</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
+    	
     	<dependency>
             <groupId>org.mule.connectors</groupId>
             <artifactId>mule-sockets-connector</artifactId>
@@ -132,16 +142,28 @@
         </dependency>
     	<dependency>
             <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
-            <artifactId>my-train-customer-sapi</artifactId>
-            <version>1.0.1</version>
-            <classifier>raml</classifier>
-            <type>zip</type>
-        </dependency>
-    	<dependency>
-            <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
             <artifactId>json-logger</artifactId>
             <version>2.0.1</version>
             <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-json-module</artifactId>
+            <version>2.1.4</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>com.mulesoft.connectors</groupId>
+            <artifactId>mule-salesforce-connector</artifactId>
+            <version>10.7.0</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>b24b82c7-69b0-4399-a459-f1bd6136fdde</groupId>
+            <artifactId>my-train-customer-sapi</artifactId>
+            <version>1.0.4</version>
+            <classifier>raml</classifier>
+            <type>zip</type>
         </dependency>
     </dependencies>
 

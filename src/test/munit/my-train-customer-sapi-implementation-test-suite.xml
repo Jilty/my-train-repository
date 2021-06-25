@@ -8,26 +8,6 @@
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="my-train-customer-sapi-implementation-test-suite.xml" />
-	<munit:test name="my-train-customer-sapi-implementation-test-suite-addCustomerTest" doc:id="34859a84-3231-4871-91a2-078e746fe481" description="Test">
-		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mock when" doc:id="b5c0c9b4-017a-48a5-b2d2-78b865351293" processor="db:insert">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="Insert" attributeName="doc:name" />
-					<munit-tools:with-attribute whereValue="a0fb427e-eefd-46d1-bf5d-c99610d1d35a" attributeName="doc:id" />
-					<munit-tools:with-attribute whereValue="Database_Config" attributeName="config-ref" />
-				</munit-tools:with-attributes>
-			</munit-tools:mock-when>
-		</munit:behavior>
-		<munit:execution >
-			<munit:set-event doc:name="Set Event" doc:id="fe364ea5-562e-44bc-8dd1-1fdc56cc5dd4" >
-				<munit:payload value='output application/json&#10;---&#10;[{&#10;    custId:"sduyiubAsXCjj"&#10;    firstName: "William",&#10;    lastName:  "Whatson",&#10;    emailId:   "willam@abc.com",&#10;    phoneNo:   "1238455",&#10;    statusId: 1,&#10;    "creationDate?": "2021-09-03",&#10;    "createdBy?":   "Ben",&#10;    "lastUpdatedDate?": "2021-09-03",&#10;    "lastUpdatedBy?":  "John"&#10;  }]' mediaType="application/dw" />
-			</munit:set-event>
-			<flow-ref doc:name="Flow-ref to addCustomer" doc:id="3aa581ff-9d64-4eb1-a479-233a96945b16" name="addCustomer"/>
-		</munit:execution>
-		<munit:validation >
-			<munit-tools:assert-that doc:name="Assert that" doc:id="98d19776-ae35-4cb4-8774-6c4d19b72856" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="payload is null"/>
-		</munit:validation>
-	</munit:test>
 	<munit:test name="my-train-customer-sapi-implementation-test-suite-getAllCustomerFlowTest" doc:id="90f03b39-fdcb-4e6a-9216-9aab6cd5245d" description="Test">
 		<munit:execution >
 			<flow-ref doc:name="Flow-ref to getAllCustomerFlow" doc:id="f261b1a9-2b8a-4143-bd2e-636113a23a45" name="getAllCustomerFlow"/>
@@ -47,11 +27,6 @@
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that" doc:id="615adc91-ba1c-49b6-ae3b-0fe5570697df" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
 		</munit:validation>
-	</munit:test>
-	<munit:test name="my-train-customer-sapi-implementation-test-suite-addCustomerTest1" doc:id="9300dc51-cd5f-4ed8-bfd2-0f4a156e5d47" description="Test">
-		<munit:execution >
-			<flow-ref doc:name="Flow-ref to addCustomer" doc:id="5019c62f-1c3f-499d-9027-fe8afbda1401" name="addCustomer"/>
-		</munit:execution>
 	</munit:test>
 
 

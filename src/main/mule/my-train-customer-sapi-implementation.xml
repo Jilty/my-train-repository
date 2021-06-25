@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
-	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
 	<json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="ee52d070-25be-42c9-8488-e5d22437423a" applicationName="myTrainservices" applicationVersion="1.0" environment="dev" />
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="680b2c85-aa13-4c13-bfda-6160017c2551" >
+		<salesforce:basic-connection username="jilty@nedumpillil.com" password="Tessakutty@123" securityToken="DkOk53b5t03GKI7tfP9san2g" />
+	</salesforce:sfdc-config>
 	<flow name="getAllCustomerFlow" doc:id="2b22f939-3023-4d91-b266-6ff15237f945" >
 		<json-logger:logger doc:name="Logger" doc:id="61a88c61-500a-4e29-b76a-b0a5122385b7" config-ref="JSON_Logger_Config" message='"started"'/>
-		<try doc:name="Try" doc:id="6471c024-9190-4c32-9008-fa937f637635" >
-			<db:select doc:name="Select" doc:id="74049e76-afb6-4653-8e52-729c428f673b" config-ref="Database_Config1">
+		<db:select doc:name="Select" doc:id="74049e76-afb6-4653-8e52-729c428f673b" config-ref="Database_Config1">
 			<db:sql><![CDATA[SELECT * FROM nrs.xxtrain_customer_details]]></db:sql>
 		</db:select>
-		</try>
+		<json-logger:logger doc:name="Logger" doc:id="53d62c71-1263-423d-89ae-a8219f9281d7" config-ref="JSON_Logger_Config" message='"json logger after select"'/>
 		<ee:transform doc:name="Transform Message" doc:id="b1518726-ac18-4e9f-9a22-a8e1de313126" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -33,26 +37,28 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<json-logger:logger doc:name="Logger" doc:id="684e9cfe-3147-4c41-a1a2-f469ba83a556" config-ref="JSON_Logger_Config" message='"json logger after transform message in get all customer flow"'/>
 		<error-handler >
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="720a5a9d-f5f1-4df0-970b-1a9c7b79ae19" type="ANY">
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="720a5a9d-f5f1-4df0-970b-1a9c7b79ae19" type="DB:BAD_SQL_SYNTAX, DB:QUERY_EXECUTION, EXPRESSION">
 				<ee:transform doc:name="Transform Message" doc:id="68e5de59-f1fa-402f-b263-85bd607adef4" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
-	description: error.description,
-	message:error.errorMessage
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
 }]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
+				<json-logger:logger doc:name="Logger" doc:id="c5fb5a02-1c7c-4c96-ba63-803a61418a04" config-ref="JSON_Logger_Config" message='"get all customer flow in error handling "'/>
 			</on-error-propagate>
 		</error-handler>
 	</flow>
 	<flow doc:id="2c477b9f-d81e-468a-98ff-7ed107c9b945" name="addCustomer" initialState="started">
 		<json-logger:logger doc:name="Logger" doc:id="f271c1a9-de43-4912-80f3-40d384ba787f" config-ref="JSON_Logger_Config" message="started"/>
-		<try doc:name="Try" doc:id="705d06c2-377f-4dda-91d5-f377ca97d6b5" >
-			<db:insert doc:name="Insert" doc:id="a0fb427e-eefd-46d1-bf5d-c99610d1d35a" config-ref="Database_Config1">
+		<db:insert doc:name="Insert" doc:id="a0fb427e-eefd-46d1-bf5d-c99610d1d35a" config-ref="Database_Config1">
 			<db:sql><![CDATA[INSERT INTO xxtrain_customer_details (customer_id,first_name,last_name,status_type_id,email_id,phone_no,creation_date,created_by,last_updated_date,last_updated_by) values
  (:custId,:fname,:lastName,:status_id,:email,:phoneNo,:createdDate,:createdBy,:lastUpdatedDate,:lastUpdatedBy)]]></db:sql>
 			<db:input-parameters><![CDATA[#[{
@@ -68,19 +74,36 @@ output application/json
 "lastUpdatedBy":payload[0].lastUpdatedBy
 }]]]></db:input-parameters>
 		</db:insert>
-		</try>
+		<json-logger:logger doc:name="Logger" doc:id="70b661c9-6ca8-4b39-a291-b779352d514b" config-ref="JSON_Logger_Config" message='"json logger after add customer"'/>
 		<set-payload value='"customer added succesfully"' doc:name="Set Payload" doc:id="c18373ce-7c22-4533-86de-34309fca510b" />
 		<json-logger:logger doc:name="Logger" doc:id="2e34343c-000f-4581-8223-d6fbb124b331" config-ref="JSON_Logger_Config" message="Flow ended successfully"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="152eaec8-57a7-4907-89b3-d41f829dd442" type="DB:BAD_SQL_SYNTAX, DB:QUERY_EXECUTION, DB:RETRY_EXHAUSTED, EXPRESSION">
+				<ee:transform doc:name="Transform Message" doc:id="33f97b06-8c9d-4cd7-a0b0-d7d7f076d2cb" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<json-logger:logger doc:name="Logger" doc:id="c5ebf425-57a3-4474-b0bd-28cd93e141a1" config-ref="JSON_Logger_Config" message='"json logger in add customer flow error handling"'/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<flow name="getUserById" doc:id="5b81d8e1-593b-46bb-8026-0d5234abda87" >
-		<try doc:name="Try" doc:id="73d80085-e191-47d6-8fc5-3f5756aa9acd" >
-			<db:select doc:name="Select" doc:id="d23eeb44-10df-4c85-a17b-16bb772793ec" config-ref="Database_Config1">
+		<json-logger:logger doc:name="Logger" doc:id="bdc320f7-bcd1-42b0-a043-8d9439b91233" config-ref="JSON_Logger_Config" message='"get user by id"'/>
+		<db:select doc:name="Select" doc:id="d23eeb44-10df-4c85-a17b-16bb772793ec" config-ref="Database_Config1">
 			<db:sql><![CDATA[SELECT * FROM xxtrain_customer_details WHERE customer_id =:customerId]]></db:sql>
 			<db:input-parameters><![CDATA[#[{
 "customerId" :  attributes.uriParams.userId
 }]]]></db:input-parameters>
 		</db:select>
-		</try>
+		<json-logger:logger doc:name="Logger" doc:id="9e743e13-4c81-4090-9c2d-878c6656466f" config-ref="JSON_Logger_Config" message='"get user by id flow after select"'/>
 		<ee:transform doc:name="Transform Message" doc:id="5224a634-b08c-4358-abdf-d07498d81657" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -99,16 +122,33 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<json-logger:logger doc:name="Logger" doc:id="22c96713-1c9c-4f37-8e64-e0d3bafa431b" config-ref="JSON_Logger_Config" message='"get user by id after transform message"'/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="92802946-a233-4388-939c-0114ff403e0e" type="DB:BAD_SQL_SYNTAX, DB:QUERY_EXECUTION, EXPRESSION, STREAM_MAXIMUM_SIZE_EXCEEDED">
+				<ee:transform doc:name="Transform Message" doc:id="8a873df4-442e-4e3e-86da-b53c19ddbe34" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<json-logger:logger doc:name="Logger" doc:id="b33e9022-f1ec-4465-8290-1381042d5f57" config-ref="JSON_Logger_Config" message='"get user by id error handling"'/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<flow name="getAllUserSubscriptions" doc:id="441c06b3-f469-449b-bf98-78d5100e40cf" >
-		<try doc:name="Try" doc:id="c13bc43c-748f-48e7-a811-86ead4d956f7" >
-			<db:select doc:name="Select" doc:id="d0029d40-8032-4b28-934d-62b4348987cc" config-ref="Database_Config1">
+		<json-logger:logger doc:name="Logger" doc:id="4ac54cd5-4c7d-4179-9a0a-cb657fca4fec" config-ref="JSON_Logger_Config" message='"get all subscription flow started"'/>
+		<db:select doc:name="Select" doc:id="d0029d40-8032-4b28-934d-62b4348987cc" config-ref="Database_Config1">
 			<db:sql><![CDATA[SELECT * FROM nrs.xxtrain_subscription_details WHERE customer_id=:customer_id]]></db:sql>
 			<db:input-parameters><![CDATA[#[{
 "customer_id" :  attributes.uriParams.userId
 }]]]></db:input-parameters>
 		</db:select>
-		</try>
 		<ee:transform doc:name="Transform Message" doc:id="70c3d6ed-2a60-42a2-83e2-049ddef8f1d7" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -136,26 +176,60 @@ payload map ( payload01 , indexOfPayload01 ) -> {
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<json-logger:logger doc:name="Logger" doc:id="7c0ace91-2ce2-4929-a042-ee3322279c4e" config-ref="JSON_Logger_Config" message='"get all subscription after trasform"'/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="bb1555f7-b990-48c1-8d3e-233766995340" type="DB:BAD_SQL_SYNTAX, DB:QUERY_EXECUTION">
+				<ee:transform doc:name="Transform Message" doc:id="cbed270e-0445-4ba7-bf9e-9e9a16c94c7b" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<json-logger:logger doc:name="Logger" doc:id="27817804-77b5-4752-a0a5-e93d693e306f" config-ref="JSON_Logger_Config" message='"get all subscription error handling"'/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<flow name="updateSubscriptionsStatus" doc:id="06e7da7d-8c6d-4092-97b6-8ad271e172f9">
 		<logger level="INFO" doc:name="Logger" doc:id="bb9bc896-176d-4995-8b79-41d62855b2e8" message='"subscriptions"'/>
 	</flow>
 	<flow name="updateCustomer" doc:id="2fbe9fad-7d17-4ea1-8aca-18e5dec9984a" >
-		<try doc:name="Try" doc:id="d9af0978-f289-42dd-ab48-f2e63c888d6a" >
-			<db:update doc:name="Update" doc:id="e8f21386-6743-45f0-8a45-3013f4a99426" config-ref="Database_Config1">
+		<json-logger:logger doc:name="Logger" doc:id="249a957a-739e-40de-b46b-9fc5b0647b05" config-ref="JSON_Logger_Config" message='"update customer flow started"'/>
+		<db:update doc:name="Update" doc:id="e8f21386-6743-45f0-8a45-3013f4a99426" config-ref="Database_Config1">
 			<db:sql><![CDATA[UPDATE nrs.xxtrain_customer_details 
 SET phone_no = : phone_no ]]></db:sql>
 			<db:input-parameters><![CDATA[#[{"phone_no": payload[0].phoneNumber}]]]></db:input-parameters>
 		</db:update>
-		</try>
+		<json-logger:logger doc:name="Logger" doc:id="73d40c26-2c4a-4779-a74c-78bd8ee40733" config-ref="JSON_Logger_Config" message='"json logger in update after query"'/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="87aa3ca6-a2d5-4cca-9c51-64aa5dff9a99" type="DB:BAD_SQL_SYNTAX, DB:QUERY_EXECUTION, DB:RETRY_EXHAUSTED">
+				<ee:transform doc:name="Transform Message" doc:id="58ea688d-f838-4920-a7a9-1a98075ae971" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<json-logger:logger doc:name="Logger" doc:id="bdc0cf48-f6dc-4d89-bf43-2f915164b452" config-ref="JSON_Logger_Config" message='"json logger in customer update error handling"'/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<flow name="getAllAlertsBySubscription" doc:id="915951c1-8048-49bd-80c7-80fe7d7c3b21" >
-		<try doc:name="Try" doc:id="9ad3a812-04e7-4105-939c-ad832358bfef" >
-			<db:select doc:name="Select" doc:id="9ec5b5f0-fa33-42a0-b7e2-749feea44b8d" config-ref="Database_Config1">
+		<db:select doc:name="Select" doc:id="9ec5b5f0-fa33-42a0-b7e2-749feea44b8d" config-ref="Database_Config1">
 			<db:sql><![CDATA[SELECT * FROM xxtrain_alert_details WHERE subscription_id =: subscriptionId]]></db:sql>
 			<db:input-parameters><![CDATA[#[{"subscriptionId" : payload[0].subscriptionId}]]]></db:input-parameters>
 		</db:select>
-		</try>
+		<json-logger:logger doc:name="Logger" doc:id="18e73575-149f-4a43-96f4-0775a39fd367" config-ref="JSON_Logger_Config" message='"json logger in get all alert after query "'/>
 		<ee:transform doc:name="Transform Message" doc:id="cdae90a8-1d0f-41c0-b5dd-9bd824ed5f6f" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -165,10 +239,28 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<json-logger:logger doc:name="Logger" doc:id="af8ef77c-5aec-433e-8b43-b32fdc5c43d6" config-ref="JSON_Logger_Config" message='"json logger in get all alerts by subscription after transform"'/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6217fe68-1392-404a-9b46-711d047ead6d" type="DB:BAD_SQL_SYNTAX, DB:QUERY_EXECUTION, EXPRESSION">
+				<ee:transform doc:name="Transform Message" doc:id="b10cf6e3-26d4-4232-b9ba-6c249e2f0c03" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<json-logger:logger doc:name="Logger" doc:id="afd3c38c-d5b5-44d0-846c-dc17c013fae9" config-ref="JSON_Logger_Config" message='"get all alerts error handling"'/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<flow doc:id="19f69b81-e3a1-4414-83e4-ea6840be5be5" name="addSubscription" initialState="started">
-		<try doc:name="Try" doc:id="98ac0472-6876-4da1-ac03-3b532128585e" >
-			<db:insert doc:name="Insert" doc:id="3304ab77-b95d-4a74-85f5-ef4567ca125e" config-ref="Database_Config1">
+		<json-logger:logger doc:name="Logger" doc:id="ef4e5f85-0bdd-4960-a3be-6e0cecd936b9" config-ref="JSON_Logger_Config" message='"add subscriptionflow started"'/>
+		<db:insert doc:name="Insert" doc:id="3304ab77-b95d-4a74-85f5-ef4567ca125e" config-ref="Database_Config1">
 			<db:sql><![CDATA[INSERT INTO xxtrain_subscription_details (customer_id,service_id,from_time,from_station,to_station,to_time,journey_date,service_type,
 route,advance_notify_time,alert_service,delay_status,status_type_id,creation_date,created_by,last_updated_date,last_updated_by) values (
 :custId,:serviceId,:fromTime,:fromStation,:toStation,:toTime,:date,:serviceType,:route,:time,:alertService,:delayStatus,
@@ -193,11 +285,28 @@ route,advance_notify_time,alert_service,delay_status,status_type_id,creation_dat
 	"updatedBy":payload[0].lastUpdatedBy?	
 }]]]></db:input-parameters>
 		</db:insert>
-		</try>
+		<json-logger:logger doc:name="Logger" doc:id="bd628f56-5fbe-4b18-9ed2-2df42544eacd" config-ref="JSON_Logger_Config" message='"add subscription flow after query"'/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="65c83441-a99d-491f-9905-9e0b0c37593a" type="DB:BAD_SQL_SYNTAX, DB:QUERY_EXECUTION, DB:RETRY_EXHAUSTED">
+				<ee:transform doc:name="Transform Message" doc:id="6d311a96-2fc8-437d-a080-b4c6237b20a6" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<json-logger:logger doc:name="Logger" doc:id="cd350fda-f61f-463b-bed2-1f24bc50f79f" config-ref="JSON_Logger_Config" message='"json logger in add subscription error handling"'/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<flow name="addAlerts" doc:id="f67bdb9d-44a9-4614-89c0-b8751bd81289" >
-		<try doc:name="Try" doc:id="065cd6a6-f3c6-482f-8aee-7a728fe0b492" >
-			<db:insert doc:name="Insert" doc:id="e40a14e9-5b0e-4406-ab14-dcfb2db85b6a" config-ref="Database_Config1">
+		<json-logger:logger doc:name="Logger" doc:id="d9c39d9f-c444-40d2-be8e-6ce272b57c1a" config-ref="JSON_Logger_Config" message='"add alerts flow started"'/>
+		<db:insert doc:name="Insert" doc:id="e40a14e9-5b0e-4406-ab14-dcfb2db85b6a" config-ref="Database_Config1">
 			<db:sql><![CDATA[INSERT INTO xxtrain_alert_details (subscription_id,email_id,email_notify,origin_location,destination_location,service_type,service_id,
 delay_status,delay_time,train_delay_reason,status_type_id,creation_date,created_by,last_updated_date,last_updated_by) values (
 :subscriptionId,:emailId,:emailNotify,:fromStation,:toStation,:serviceType,:serviceId,:delaystatus,:delayTime,:reason,:statusTypeid,
@@ -222,6 +331,116 @@ delay_status,delay_time,train_delay_reason,status_type_id,creation_date,created_
 	"updatedBy":payload[0].lastUpdatedBy?	
 }]]]></db:input-parameters>
 		</db:insert>
-		</try>
+		<json-logger:logger doc:name="Logger" doc:id="2fcf72af-404a-4401-89f8-49a507ea83ef" config-ref="JSON_Logger_Config" message='"add alertsflow after query"'/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0be95d96-9434-4887-88d3-192bb0b5ae44" type="DB:BAD_SQL_SYNTAX, DB:QUERY_EXECUTION, DB:RETRY_EXHAUSTED">
+				<ee:transform doc:name="Transform Message" doc:id="83ed8128-0451-4156-b448-f6becca3882e" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<json-logger:logger doc:name="Logger" doc:id="47301b6b-1939-43de-887b-86b50b5972bf" config-ref="JSON_Logger_Config" message='"add alerts error handling"'/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<flow name="user-Sfdc-flow" doc:id="5955f3cd-200f-41fe-9b96-c2cc3c4eeb3a" >
+		<json-logger:logger doc:name="Logger" doc:id="d74d3fbd-6290-4a92-ac23-eb289b28596e" config-ref="JSON_Logger_Config" message='"user sfdc flow started"'/>
+		<db:select doc:name="Select" doc:id="271b4801-36ec-4ea0-b456-d119f044b11b" config-ref="Database_Config1">
+			<db:sql ><![CDATA[select customer_id,first_name,last_name,email_id,phone_no
+from xxtrain_customer_details a,xxtrain_status_details b where customer_id in 
+(select distinct customer_id from xxtrain_subscription_details c where customer_id = c.customer_id GROUP BY customer_id
+HAVING COUNT(customer_id) >= 1) and b.status_type_id = a.status_type_id and b.status_type_name = 'ACTIVE';]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="1ac21052-e2c6-4ebe-87af-e3146dfe55ec" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+
+payload map(payload01,index) -> 
+{
+	LastName: payload01.last_name as String,
+	FirstName: payload01.first_name as String,
+	Phone: payload01.phone_no as Number,
+	Email: payload01.email_id as String
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<batch:job jobName="salesforceBatch_Job" doc:id="a730e9f3-1d85-4299-a594-5d1751940726" >
+			<batch:process-records >
+				<batch:step name="isAccountWithSalesForce" doc:id="de2abc0a-e54b-48b0-93c3-beafc38db104" >
+					<try doc:name="Try" doc:id="5013bc37-02b1-45df-9af8-40024cd194e2" >
+						<salesforce:query doc:name="Query" doc:id="34a18d25-6ca5-4f77-893e-a98714dd6f05" config-ref="Salesforce_Config" target="exists" targetValue="#[(sizeOf(payload) &gt; 0)]">
+						<salesforce:salesforce-query><![CDATA[select Email from Contact where Email = ':email' and FirstName = ':custName']]></salesforce:salesforce-query>
+						<salesforce:parameters><![CDATA[#[output application/java
+---
+{
+	"custId" : payload.Name default " " as String,
+	"custName" : payload.FirstName default " " as String,
+	"email":payload.Email default " " as String
+}]]]></salesforce:parameters>
+					</salesforce:query>
+						<error-handler>
+							<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="bfbb3c01-1d3d-43e1-b6b7-3519467823d5" >
+								<ee:transform doc:name="Transform Message" doc:id="7e2baa4d-ff4d-415e-8151-491388f4738c" >
+									<ee:message >
+										<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Error Type": error.errorType.identifier,
+	"Error Message": error.errorMessage.payload,
+	"Error Description": error.detailedDescription
+}]]></ee:set-payload>
+									</ee:message>
+								</ee:transform>
+							</on-error-continue>
+						</error-handler>
+					</try>
+				</batch:step>
+				<batch:step name="salesForceIntegration" doc:id="790b6785-1049-4c0b-97f1-d60ee41a2814" >
+					<batch:aggregator doc:name="Batch Aggregator" doc:id="0d2d7770-5e46-447f-9e33-f8402a254d4d" size="3">
+						<salesforce:create doc:name="Create" doc:id="432d2e6f-fb9e-4868-8450-cf5a19f086cd" config-ref="Salesforce_Config" type="Contact"/>
+						<ee:transform doc:name="Transform Message" doc:id="044cc046-da50-497f-bc24-3de4e8ea25c8" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Description: "Successfully Integrated to Salesforce",
+	Message: payload.items.message,
+	StatusCode: payload.items.statusCode,
+	successfull: payload.successful
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+						<json-logger:logger doc:name="Logger" doc:id="a7e9e9ab-fa48-43b5-8726-6d5a35a597b2" config-ref="JSON_Logger_Config" message='"json logger in batch aggregator"'/>
+					</batch:aggregator>
+				</batch:step>
+			</batch:process-records>
+			<batch:on-complete >
+				<json-logger:logger doc:name="Logger" doc:id="ec59b0dc-e487-4368-8e9d-c48cc0f40d8f" config-ref="JSON_Logger_Config" message='"logger in on complete batch job"'/>
+			</batch:on-complete>
+		</batch:job>
+		<ee:transform doc:name="Transform Message" doc:id="3454a03b-9a1d-4d98-bb35-30f3b832f1cf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Description: "Successfully Integrated to Salesforce",
+	Message: "Records that passed through Salesforce"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<json-logger:logger doc:name="Logger" doc:id="24c416e1-abff-40df-9332-53bfdfb3695b" config-ref="JSON_Logger_Config" message='"json logger data send sfdc succesfully"'/>
 	</flow>
 </mule>
